@@ -1,0 +1,102 @@
+[
+    {
+        "time": 5,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.295545,
+        "lon": 5.361421,
+        "windSpeed": 3.68,
+        "windDir": "W"
+    },
+    {
+        "time": 6,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.301268,
+        "lon": 5.374634,
+        "windSpeed": 14.05,
+        "windDir": "W"
+    },
+    {
+        "time": 7,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.295729,
+        "lon": 5.363503,
+        "windSpeed": 19.25,
+        "windDir": "W"
+    },
+    {
+        "time": 8,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.287167,
+        "lon": 5.370875,
+        "windSpeed": 19.6,
+        "windDir": "W"
+    },
+    {
+        "time": 9,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.297411,
+        "lon": 5.3775,
+        "windSpeed": 12.12,
+        "windDir": "W"
+    },
+    {
+        "time": 10,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.302099,
+        "lon": 5.373503,
+        "windSpeed": 5.55,
+        "windDir": "W"
+    },
+    {
+        "time": 11,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.303158,
+        "lon": 5.36923,
+        "windSpeed": 19.92,
+        "windDir": "W"
+    },
+    {
+        "time": 12,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.300926,
+        "lon": 5.364579,
+        "windSpeed": 18.07,
+        "windDir": "W"
+    },
+    {
+        "time": 13,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.306147,
+        "lon": 5.373901,
+        "windSpeed": 11.12,
+        "windDir": "W"
+    },
+    {
+        "time": 14,
+        "yaw": 359.12,
+        "pitch": -0.62,
+        "roll": 7.0,
+        "lat": 43.292561,
+        "lon": 5.374292,
+        "windSpeed": 2.36,
+        "windDir": "W"
+    }
+]
