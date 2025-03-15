@@ -28,7 +28,7 @@ def calculate_distances(navigation_data):
         print("❌ Pas assez de points GPS pour effectuer les calculs.")
         return
 
-    print("✅ Début des calculs des distances...\n")
+    print("\n✅ Début des calculs des distances...\n")
 
     # 📌 Boucle pour calculer les distances entre chaque point
     for i in range(1, len(time_series)):
@@ -44,7 +44,7 @@ def calculate_distances(navigation_data):
         total_distance_nm += distance_nm
 
         # 📌 Affichage des résultats pour chaque point
-        print(f"📍 Position: ({lat2:.5f}, {lon2:.5f}) | "
+        print(f"📍 Position: ({lat2}, {lon2}) | "
               f"⏱ Temps: {time2}s | "
               f"📏 Distance instantanée: {distance_km:.5f} km ({distance_nm:.5f} MN)")
 

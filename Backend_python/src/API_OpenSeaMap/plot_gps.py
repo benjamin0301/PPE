@@ -1,77 +1,48 @@
 import folium
-import pandas as pd
 import webbrowser
-from folium import plugins
-import os
 
-def plot_gps_route():
-    # 📌 Charger le fichier CSV contenant les données GPS
-    csv_file = os.path.join(os.path.dirname(__file__), "../../data/gps_data.csv")
-    df = pd.read_csv(csv_file)
+from src.API_OpenSeaMap.controls import add_controls
+from src.API_OpenSeaMap.layers import add_base_layers
+from src.API_OpenSeaMap.markers import add_markers
+from src.API_OpenSeaMap.route import add_route
+from src.API_OpenSeaMap.sidebar import add_sidebar
 
-    # 📌 Création de la carte avec OpenStreetMap + OpenSeaMap
-    m = folium.Map(
-        location=[df["latitude"].iloc[0], df["longitude"].iloc[0]],
-        zoom_start=14,
-        tiles="OpenStreetMap"
-    )
 
-    # 📌 Ajouter OpenSeaMap en couche superposée
-    folium.TileLayer(
-        tiles="https://tiles.openseamap.org/seamark/{z}/{x}/{y}.png",
-        attr="OpenSeaMap",
-        name="OpenSeaMap"
-    ).add_to(m)
+# --- Fonction pour créer et retourner la carte de base ---
+def create_map(center, zoom=14, base_tiles="OpenStreetMap"):
+    return folium.Map(location=center, zoom_start=zoom, tiles=base_tiles)
 
-    # 📌 Ajouter une couche satellite pour basculer entre les vues
-    folium.TileLayer(
-        tiles="https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png",
-        attr="OpenTopoMap",
-        name="Relief"
-    ).add_to(m)
+# --- Fonction principale qui assemble tous les éléments ---
+def plot_gps_route(navigation_data):
+    # Vérifier la disponibilité des données GPS
+    latitudes = navigation_data.get("latitude", [])
+    longitudes = navigation_data.get("longitude", [])
+    if not latitudes or not longitudes:
+        print("❌ Aucune donnée GPS disponible.")
+        return
 
-    # 📌 Ajouter une trace GPS plus visible
-    coords = list(zip(df["latitude"], df["longitude"]))
-    folium.PolyLine(
-        coords, color="blue", weight=4, opacity=0.7, dash_array="5, 10"
-    ).add_to(m)
+    # Création de la carte (centrée sur le premier point)
+    center = [latitudes[0], longitudes[0]]
+    m = create_map(center, zoom=14)
 
-    # 📌 Ajouter une animation de mouvement le long du trajet
-    plugins.AntPath(
-        coords, color="red", weight=3, delay=500
-    ).add_to(m)
+    # Ajout des couches de fond et overlays
+    add_base_layers(m)
 
-    # 📌 Ajouter des marqueurs pour chaque point GPS
-    for idx, row in df.iterrows():
-        folium.Marker(
-            location=[row["latitude"], row["longitude"]],
-            popup=f"📍 Heure: {row['timestamp']}s | 🚀 {row['speed_kmh']} km/h",
-            icon=folium.Icon(color="blue" if idx != len(df)-1 else "red")
-        ).add_to(m)
+    # Tracé de la route
+    add_route(m, latitudes, longitudes)
 
-    # 📌 Ajouter des marqueurs spéciaux pour le départ et l’arrivée
-    folium.Marker(
-        location=[df["latitude"].iloc[0], df["longitude"].iloc[0]],
-        popup="🚀 Départ",
-        icon=folium.Icon(color="green", icon="play")
-    ).add_to(m)
+    # Ajout des marqueurs
+    add_markers(m, navigation_data)
 
-    folium.Marker(
-        location=[df["latitude"].iloc[-1], df["longitude"].iloc[-1]],
-        popup="🏁 Arrivée",
-        icon=folium.Icon(color="red", icon="flag")
-    ).add_to(m)
+    # Ajout des contrôles (MiniMap, Measure, LayerControl)
+    add_controls(m)
 
-    # 📌 Ajouter une échelle de distance
-    plugins.MeasureControl(primary_length_unit="kilometers").add_to(m)
+    # Ajout de la sidebar pour les infos dynamiques
+    #add_sidebar(m)
 
-    # 📌 Ajouter un contrôle pour basculer entre les différentes cartes
-    folium.LayerControl().add_to(m)
-
-    # 📌 Sauvegarder et afficher la carte
-    map_file = "data/gps_routes/gps_route.html"
+    # Sauvegarde et ouverture de la carte
+    map_file = r"C:\Users\gendr\OneDrive\Documents\SUPERIEUR\ING4\PPE\Backend_python\data\gps_routes\gps_route.html"
     m.save(map_file)
     webbrowser.open(map_file)
-
     print("✅ Carte améliorée générée avec succès !")
 
