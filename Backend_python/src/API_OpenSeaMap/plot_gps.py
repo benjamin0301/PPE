@@ -1,5 +1,5 @@
 from folium import Element
-
+import os
 import folium
 import webbrowser
 
@@ -7,7 +7,7 @@ from src.API_OpenSeaMap.controls import add_controls
 from src.API_OpenSeaMap.layers import add_base_layers
 from src.API_OpenSeaMap.markers import add_markers
 from src.API_OpenSeaMap.route import add_route
-# La sidebar est ajoutée via add_markers()
+
 
 def create_map(center, zoom=14, base_tiles="OpenStreetMap"):
     m = folium.Map(location=center, zoom_start=zoom, tiles=base_tiles)
@@ -37,7 +37,9 @@ def plot_gps_route(navigation_data):
     add_markers(m, navigation_data)
     add_controls(m)
 
-    map_file = r"C:\Users\gendr\OneDrive\Documents\SUPERIEUR\ING4\PPE\Backend_python\data\gps_routes\gps_route.html"
+    base_dir = os.path.dirname(__file__)
+    map_file = os.path.join(base_dir, "..","..", "data", "gps_routes", "gps_route.html")
+
     m.save(map_file)
     webbrowser.open(map_file)
     print("✅ Carte améliorée générée avec succès !")
