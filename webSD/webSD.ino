@@ -60,10 +60,10 @@ void OnDataRecv(const esp_now_recv_info_t *info, const uint8_t *incomingData, in
   }
 }
 
-// 📌 Page d'accueil : affiche le dernier fichier "nav*.json" enregistré sur la carte SD
+// 📌 Page d'accueil : affiche tous les fichiers "nav*.json" enregistrés sur la carte SD
 void handleRoot() {
   String html = "<html><head><title>ESP32 Data Server</title></head><body>";
-  html += "<h2>Dernier fichier enregistré</h2>";
+  html += "<h2>Fichiers enregistrés</h2>";
 
   Serial.println("handleRoot() appelé : tentative d'ouverture du répertoire racine");
   File root = SD.open("/");
@@ -83,40 +83,24 @@ void handleRoot() {
     }
     root.rewindDirectory(); // Réinitialise l'itérateur pour la recherche suivante
 
-    String lastFilename = "";
-    int lastNumber = -1;
-
+    bool fileFound = false;
     File file = root.openNextFile();
     while (file) {
-      String filename = file.name();  // Le nom contient le '/' initial
-    Serial.print("---------");
-    Serial.println(filename);
+      String filename = file.name();
+      Serial.print("---------");
+      Serial.println(filename);
+      // Vérifier si le nom commence par "nav" et se termine par ".json"
       if (filename.startsWith("nav") && filename.endsWith(".json")) {
-        // Retirer le '/' initial pour obtenir le nom complet, ex : nav3.json
-        String disp = filename.substring(1);
-        // Extraire le numéro : "nav" fait 3 caractères et ".json" 5 caractères
-        String numStr = disp.substring(3, disp.length() - 5);
-        int num = numStr.toInt();
-        Serial.print("---------");
-        Serial.print(num);
-        if (num > lastNumber) {
-
-          Serial.print("---------YOOOOOO");
-          lastNumber = num;
-          lastFilename = filename;
-        }
+        fileFound = true;
+        // Ajout d'un lien pour télécharger le fichier
+        html += "<p><a href='/download?file=" + filename + "' download>" + filename + "</a></p>";
       }
       file.close();
       file = root.openNextFile();
     }
     root.close();
 
-
-    
-    if (lastFilename != "") {
-      //String displayName = lastFilename.substring(1); // Supprime le '/' initial
-      html += "<p><a href='/download?file=" + lastFilename + "' download>" + lastFilename + "</a></p>";
-    } else {
+    if (!fileFound) {
       html += "<p>Aucun fichier trouvé.</p>";
     }
   }
