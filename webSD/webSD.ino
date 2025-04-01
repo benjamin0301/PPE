@@ -17,6 +17,7 @@ HardwareSerial gpsSerial(1);
 TinyGPSPlus gps;
 
 // EEPROM avec Preferences (conservée mais non utilisée pour l'enregistrement)
+// Nous utiliserons Preferences pour sauvegarder le numéro du dernier fichier créé.
 Preferences preferences;
 
 // Initialisation du serveur Web
@@ -163,14 +164,14 @@ void startWebServer() {
 }
 
 // Fonction pour déterminer le prochain nom de fichier disponible sur la carte SD (extension .json)
+// Modification : Utilisation de Preferences pour mémoriser le dernier numéro utilisé
 String getNextFilename() {
-  int fileNum = 1;
-  String filename;
-  do {
-    filename = "/nav" + String(fileNum) + ".json";
-    fileNum++;
-  } while (SD.exists(filename));
-  return filename;
+  // Récupérer le dernier numéro sauvegardé (0 par défaut)
+  int lastNav = preferences.getInt("last_nav", 0);
+  lastNav++; // Incrémenter pour le nouveau fichier
+  // Sauvegarder le nouveau numéro dans l'EEPROM
+  preferences.putInt("last_nav", lastNav);
+  return "/nav" + String(lastNav) + ".json";
 }
 
 void setup() {
